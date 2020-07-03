@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.feedback.dao.FeedbackDao">
+
+    <resultMap type="shop.xianbao.modules.feedback.entity.FeedbackEntity" id="feedbackMap">
+        <result property="id" column="id"/>
+        <result property="description" column="description"/>
+        <result property="contactInfo" column="contact_info"/>
+        <result property="pictures" column="pictures"/>
+        <result property="reporterId" column="reporter_id"/>
+        <result property="sort" column="sort"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="creator" column="creator"/>
+        <result property="updater" column="updater"/>
+        <result property="isDeleted" column="is_deleted"/>
+    </resultMap>
+
+    <select id="getList" resultType="shop.xianbao.modules.feedback.dto.FeedbackListDTO">
+        SELECT
+        f.id,
+        f.description,
+        f.contact_info,
+        f.pictures,
+        f.reporter_id,
+        f.`status`,
+        uu.nickname,
+        f.sort,
+        f.create_date,
+        f.update_date,
+        f.creator,
+        f.updater,
+        f.is_deleted
+        FROM yh_feedback f
+        LEFT JOIN wxx_union_user uu ON uu.id = f.reporter_id
+        <where>
+            <if test="description != null and description !=''">
+                and f.description LIKE CONCAT('%',CONCAT(#{description},'%'))
+            </if>
+            <if test="status != null and status >=0">
+                and f.status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="getInfo" resultType="shop.xianbao.modules.feedback.dto.FeedbackDTO">
+        SELECT
+        f.id,
+        f.description,
+        f.contact_info,
+        f.pictures,
+        f.reporter_id,
+        uu.nickname,
+        f.`status`,
+        f.sort,
+        f.create_date,
+        f.update_date,
+        f.creator,
+        f.updater,
+        f.is_deleted
+        FROM yh_feedback f
+        LEFT JOIN wxx_union_user uu ON uu.id = f.reporter_id
+        <where>
+            f.id = #{id}
+        </where>
+    </select>
+</mapper>

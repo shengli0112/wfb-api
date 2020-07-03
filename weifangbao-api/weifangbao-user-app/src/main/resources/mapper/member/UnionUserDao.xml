@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.member.dao.UnionUserDao">
+
+	<resultMap type="shop.xianbao.modules.unionuser.entity.UnionUserEntity" id="unionUserMap">
+		<result property="id" column="id"/>
+		<result property="username" column="username"/>
+		<result property="password" column="password"/>
+		<result property="salt" column="salt"/>
+		<result property="mobile" column="mobile"/>
+		<result property="email" column="email"/>
+		<result property="realname" column="realname"/>
+		<result property="nickname" column="nickname"/>
+		<result property="avatar" column="avatar"/>
+		<result property="gender" column="gender"/>
+		<result property="idCardNo" column="id_card_no"/>
+		<result property="idCardFront" column="id_card_front"/>
+		<result property="idCardBack" column="id_card_back"/>
+		<result property="idCardHand" column="id_card_hand"/>
+		<result property="isRealAuth" column="is_real_auth"/>
+		<result property="isLocked" column="is_locked"/>
+		<result property="lockCase" column="lock_case"/>
+		<result property="lockedTime" column="locked_time"/>
+		<result property="birthday" column="birthday"/>
+		<result property="profession" column="profession"/>
+		<result property="sort" column="sort"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="creator" column="creator"/>
+		<result property="updater" column="updater"/>
+		<result property="isDeleted" column="is_deleted"/>
+		<result property="countryId" column="country_id"/>
+		<result property="country" column="country"/>
+		<result property="provinceId" column="province_id"/>
+		<result property="province" column="province"/>
+		<result property="cityId" column="city_id"/>
+		<result property="city" column="city"/>
+		<result property="districtId" column="district_id"/>
+		<result property="district" column="district"/>
+		<result property="address" column="address"/>
+		<result property="slogan" column="slogan"/>
+		<result property="pId" column="p_id"/>
+		<result property="gId" column="g_id"/>
+		<result property="goldCount" column="gold_count"/>
+	</resultMap>
+	<update id="addGoldCount">
+        UPDATE wxx_union_user SET gold_count = gold_count + ${addCount}
+        WHERE id = #{unionId}
+        and is_deleted = 0
+    </update>
+	<select id="getList" resultType="shop.xianbao.modules.member.dto.InviteUserListDTO">
+        SELECT
+            uu.id,
+            uu.avatar,
+            uu.nickname,
+            uu.create_date
+        FROM wxx_union_user uu
+        WHERE uu.p_id = #{pId}
+    </select>
+</mapper>

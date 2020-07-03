@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.customer.dao.CustomerDao">
+
+	<resultMap type="shop.xianbao.modules.customer.entity.CustomerEntity" id="customerMap">
+		<result property="id" column="id"/>
+		<result property="unionId" column="union_id"/>
+		<result property="surname" column="surname"/>
+		<result property="name" column="name"/>
+		<result property="firstSpelling" column="first_spelling"/>
+		<result property="mobile" column="mobile"/>
+		<result property="gender" column="gender"/>
+		<result property="remark" column="remark"/>
+		<result property="isMarked" column="is_marked"/>
+		<result property="sort" column="sort"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="creator" column="creator"/>
+		<result property="updater" column="updater"/>
+		<result property="isDeleted" column="is_deleted"/>
+	</resultMap>
+
+	<select id="getList" resultType="shop.xianbao.modules.customer.dto.CustomerListDTO">
+		SELECT
+		id,
+		union_id,
+		surname,
+		`name`,
+		first_spelling,
+		mobile,
+		gender,
+		remark,
+		is_marked,
+		sort,
+		create_date,
+		update_date,
+		creator,
+		updater,
+		is_deleted
+		FROM yh_customer
+		<where>
+			is_deleted = 0
+			AND union_id = #{unionId}
+			<if test="search != null and search !=''">
+				AND concat(surname,`name`) like concat(#{search},"%")
+				OR first_spelling like concat(#{search},"%")
+			</if>
+			<if test="isMarked != null and isMarked !=''">
+				AND is_marked = #{isMarked}
+			</if>
+
+		</where>
+		ORDER BY first_spelling
+	</select>
+</mapper>

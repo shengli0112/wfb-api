@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.member.dao.UserAuthenticationDao">
+
+	<resultMap type="shop.xianbao.modules.unionuser.entity.UserAuthenticationEntity" id="userAuthenticationMap">
+		<result property="id" column="id"/>
+		<result property="unionId" column="union_id"/>
+		<result property="status" column="status"/>
+		<result property="sort" column="sort"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="creator" column="creator"/>
+		<result property="updater" column="updater"/>
+		<result property="isDeleted" column="is_deleted"/>
+	</resultMap>
+
+	<sql id="whereSql">
+		WHERE ua.is_deleted=0
+		<if test="nickname != null and nickname != ''">
+			and uu.nickname like concat(#{nickname},'%')
+		</if>
+		<if test="username != null and username != ''">
+			and uu.username like concat(#{username},'%')
+		</if>
+		<if test="companyName != null and companyName != ''">
+			and ua.company_name like concat(#{companyName},'%')
+		</if>
+		<if test="status != null and status != ''">
+			and ua.status = #{status}
+		</if>
+	</sql>
+
+	<select id="selectUserAuthPage" resultType="shop.xianbao.modules.member.dto.UserAuthenticationListDTO">
+		SELECT
+		ua.id,
+		uu.avatar,
+		uu.mobile,
+		uu.username,
+		uu.nickname,
+		ua.company_name,
+		ua.company_address,
+		ua.business_license,
+		ua.company_photo,
+		ua.status
+		FROM
+		yh_user_authentication ua
+		LEFT JOIN wxx_union_user uu ON uu.id = ua.union_id
+		<include refid="whereSql"/>
+	</select>
+
+	<select id="selectCount" resultType="Integer">
+		SELECT COUNT(ua.id)
+		from yh_user_authentication ua
+		LEFT JOIN wxx_union_user uu ON uu.id = ua.union_id
+		<include refid="whereSql"/>
+	</select>
+
+	<select id="selectUserAuthById" resultType="shop.xianbao.modules.member.dto.UserAuthenticationDTO">
+		SELECT
+		ua.id,
+		uu.username,
+		uu.nickname,
+		uu.avatar,
+		ua.company_name,
+		ua.company_address,
+		ua.business_license,
+		ua.company_photo,
+		ua.`status`,
+		ua.examine_time,
+		ua.create_date,
+		ua.remark
+		FROM
+		yh_user_authentication ua
+		LEFT JOIN wxx_union_user uu ON uu.id = ua.union_id
+		where ua.id = #{id}
+	</select>
+
+	<select id="updateUnionUserAuth">
+		UPDATE wxx_union_user uu SET uu.is_real_auth = #{isRealAuth} WHERE uu.id = #{unionId}
+	</select>
+</mapper>

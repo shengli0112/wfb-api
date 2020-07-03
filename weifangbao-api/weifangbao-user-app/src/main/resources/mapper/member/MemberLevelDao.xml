@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.member.dao.MemberLevelDao">
+
+    <resultMap type="shop.xianbao.modules.member.entity.MemberLevelEntity" id="memberLevelMap">
+        <result property="id" column="id"/>
+        <result property="storeId" column="store_id"/>
+        <result property="levelName" column="level_name"/>
+        <result property="minIntegral" column="min_integral"/>
+        <result property="goodsDiscount" column="goods_discount"/>
+        <result property="description" column="description"/>
+        <result property="isDefault" column="is_default"/>
+        <result property="quota" column="quota"/>
+        <result property="upgrade" column="upgrade"/>
+        <result property="sort" column="sort"/>
+        <result property="relation" column="relation"/>
+        <result property="creator" column="creator"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updater" column="updater"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="isDeleted" column="is_deleted"/>
+    </resultMap>
+
+    <select id="getList" resultType="shop.xianbao.modules.member.entity.MemberLevelEntity">
+        select id,shop_id,level_name,min_integral,sort,goods_discount,description,is_default,quota,upgrade,relation,creator,create_date,updater
+        FROM wdp_member_level where is_deleted = 0
+    </select>
+</mapper>

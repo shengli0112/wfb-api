@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.property.dao.HelpFindHouseDao">
+
+	<resultMap type="shop.xianbao.modules.property.entity.HelpFindHouseEntity" id="helpFindHouseMap">
+		<result property="id" column="id"/>
+		<result property="unionId" column="union_id"/>
+		<result property="areaId" column="area_id"/>
+		<result property="budget" column="budget"/>
+		<result property="apartment" column="apartment"/>
+		<result property="sort" column="sort"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="creator" column="creator"/>
+		<result property="updater" column="updater"/>
+		<result property="isDeleted" column="is_deleted"/>
+	</resultMap>
+
+	<select id="getList" resultType="shop.xianbao.modules.property.dto.HelpFindHouseListDTO">
+		SELECT
+		hfh.id,
+		hfh.union_id,
+		uu.mobile,
+		uu.nickname,
+		hfh.area_id,
+		hfh.budget,
+		hfh.apartment,
+		hfh.sort,
+		hfh.create_date,
+		hfh.update_date,
+		hfh.creator,
+		hfh.updater,
+		hfh.is_deleted
+		FROM yh_help_find_house hfh
+		LEFT JOIN wxx_union_user uu ON uu.id = hfh.union_id
+		<where>
+			hfh.is_deleted = 0
+			<if test="status != null and status !=''">
+				and hfh.status = #{status}
+			</if>
+			<if test="areaId != null and areaId !=''">
+				and hfh.area_id = #{areaId}
+			</if>
+			<if test="budget != null and budget !=''">
+				and hfh.budget = #{budget}
+			</if>
+			<if test="apartment != null and apartment !=''">
+				and hfh.apartment in
+				<foreach collection="apartment" open="(" close=")" separator="," item="ap">
+					#{ap}
+				</foreach>
+			</if>
+		</where>
+	</select>
+</mapper>

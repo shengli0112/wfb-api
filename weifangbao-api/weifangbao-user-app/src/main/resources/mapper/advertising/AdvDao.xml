@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.advertising.dao.AdvDao">
+
+    <resultMap type="shop.xianbao.modules.advertising.entity.AdvEntity" id="advMap">
+        <result property="id" column="id"/>
+        <result property="apId" column="ap_id"/>
+        <result property="title" column="title"/>
+        <result property="url" column="url"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="clickNum" column="click_num"/>
+        <result property="sort" column="sort"/>
+        <result property="creator" column="creator"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updater" column="updater"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="isDeleted" column="is_deleted"/>
+    </resultMap>
+</mapper>

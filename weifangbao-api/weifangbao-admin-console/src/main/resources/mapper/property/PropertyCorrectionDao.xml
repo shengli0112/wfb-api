@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.property.dao.PropertyCorrectionDao">
+
+	<resultMap type="shop.xianbao.modules.property.entity.PropertyCorrectionEntity" id="propertyCorrectionMap">
+		<result property="id" column="id"/>
+		<result property="propertyId" column="property_id"/>
+		<result property="description" column="description"/>
+		<result property="contactInfo" column="contact_info"/>
+		<result property="screenshot" column="screenshot"/>
+		<result property="reporterId" column="reporter_id"/>
+		<result property="sort" column="sort"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="creator" column="creator"/>
+		<result property="updater" column="updater"/>
+		<result property="isDeleted" column="is_deleted"/>
+	</resultMap>
+
+	<select id="getList" resultType="shop.xianbao.modules.property.dto.PropertyCorrectionListDTO">
+		SELECT
+		pc.id,
+		pc.property_id,
+		p.property_name,
+		pc.description,
+		pc.contact_info,
+		pc.screenshot,
+		pc.reporter_id,
+		uu.nickname,
+		pc.`status`,
+		pc.sort,
+		pc.create_date,
+		pc.update_date,
+		pc.creator,
+		pc.updater,
+		pc.is_deleted
+		FROM yh_property_correction pc
+		LEFT JOIN wxx_union_user uu ON uu.id = pc.reporter_id
+		LEFT JOIN yh_property p ON pc.property_id = p.id
+		<where>
+			<if test="propertyName != null and propertyName !=''">
+				and p.property_name LIKE CONCAT(#{propertyName},'%')
+			</if>
+			<if test="status != null and status >=0">
+				and pc.status = #{status}
+			</if>
+		</where>
+	</select>
+
+	<select id="getInfo" resultType="shop.xianbao.modules.property.dto.PropertyCorrectionDTO">
+		SELECT
+		pc.id,
+		pc.property_id,
+		p.property_name,
+		pc.description,
+		pc.contact_info,
+		pc.screenshot,
+		pc.reporter_id,
+		uu.nickname,
+		pc.`status`,
+		pc.sort,
+		pc.create_date,
+		pc.update_date,
+		pc.creator,
+		pc.updater,
+		pc.is_deleted
+		FROM yh_property_correction pc
+		LEFT JOIN wxx_union_user uu ON uu.id = pc.reporter_id
+		LEFT JOIN yh_property p ON pc.property_id = p.id
+		<where>
+			pc.id = #{id}
+		</where>
+	</select>
+</mapper>

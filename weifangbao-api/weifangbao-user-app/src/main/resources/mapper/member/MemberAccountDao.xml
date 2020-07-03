@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.member.dao.MemberAccountDao">
+
+    <resultMap type="shop.xianbao.modules.member.entity.MemberAccountEntity" id="memberAccountMap">
+        <result property="id" column="id"/>
+        <result property="uid" column="uid"/>
+        <result property="storeId" column="store_id"/>
+        <result property="point" column="point"/>
+        <result property="balance" column="balance"/>
+        <result property="coin" column="coin"/>
+        <result property="memberCunsum" column="member_cunsum"/>
+        <result property="memberSumPoint" column="member_sum_point"/>
+        <result property="creator" column="creator"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updater" column="updater"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="isDeleted" column="is_deleted"/>
+    </resultMap>
+</mapper>

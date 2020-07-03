@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.member.dao.MemberDao">
+
+	<resultMap type="shop.xianbao.modules.member.entity.MemberEntity" id="memberMap">
+		<result property="id" column="id"/>
+		<result property="instanceId" column="instance_id"/>
+		<result property="userName" column="user_name"/>
+		<result property="mobile" column="mobile"/>
+		<result property="salt" column="salt"/>
+		<result property="password" column="password"/>
+		<result property="status" column="status"/>
+		<result property="editStatus" column="edit_status"/>
+		<result property="creator" column="creator"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updater" column="updater"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="isDeleted" column="is_deleted"/>
+	</resultMap>
+
+	<sql id="un_user_field">
+		un.id,
+		un.username,
+		un.password,
+		un.salt,
+		un.mobile,
+		un.email,
+		un.realname,
+		un.nickname,
+		un.avatar,
+		un.gender,
+		un.id_card_no,
+		un.id_card_front,
+		un.id_card_back,
+		un.id_card_hand,
+		un.is_real_auth,
+		un.is_locked,
+		un.lock_case,
+		un.locked_time,
+		un.birthday,
+		un.profession,
+		un.sort,
+		un.create_date,
+		un.update_date,
+		un.creator,
+		un.updater,
+		un.is_deleted,
+		un.country_id,
+		un.country,
+		un.province_id,
+		un.province,
+		un.city_id,
+		un.city,
+		un.district_id,
+		un.district,
+		un.address,
+		un.slogan,
+		un.p_id,
+		un.g_id
+    </sql>
+	<select id="getList" resultType="shop.xianbao.modules.member.dto.MemberUserListDTO">
+		SELECT
+		<include refid="un_user_field"></include>
+		FROM wxx_union_user un
+		LEFT JOIN wxx_member m ON m.union_id = un.id
+		<where>
+			m.is_deleted = 0 AND un.is_deleted = 0
+			<if test="id != null and id.trim() != '' ">
+				AND un.id = #{id}
+			</if>
+			<if test="userName != null and userName.trim() != ''">
+				AND un.username like CONCAT('%',#{userName},'%')
+			</if>
+			<if test="nickName != null and nickName.trim() != ''">
+				AND un.nickname like CONCAT('%',#{nickName},'%')
+			</if>
+			<if test="realname != null and realname.trim() != ''">
+				AND un.realname like CONCAT('%',#{realname},'%')
+			</if>
+			<if test="mobile != null  and mobile.trim() != ''">
+				AND un.mobile like CONCAT('%',#{mobile},'%')
+			</if>
+			<if test="email != null  and email.trim() != ''">
+				AND un.email like CONCAT('%',#{email},'%')
+			</if>
+			<if test="startTime != null">
+				AND un.create_date &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND un.create_date &lt;= #{endTime}
+			</if>
+			<if test="pId != null and pId != ''">
+				AND un.p_id = #{pId}
+			</if>
+			<if test="isRealAuth != null and isRealAuth != ''">
+				AND un.is_real_auth = #{isRealAuth}
+			</if>
+		</where>
+	</select>
+
+
+	<sql id="sysUser">
+        id,instance_id,user_name,mobile,salt,password,status,creator,create_date,updater,update_date,is_deleted
+    </sql>
+
+	<update id="updateUserDeleted" parameterType="java.util.Map">
+		UPDATE wxx_member SET is_deleted = 1,updater=#{params.creator},update_date = now()
+		WHERE
+		id IN
+		<foreach collection="params.ids" item="id" separator="," open="(" close=")">
+			#{id}
+		</foreach>
+		AND is_deleted = 0
+	</update>
+
+	<select id="queryBathMemberInfo" parameterType="java.util.List" resultType="shop.xianbao.modules.member.entity.MemberEntity">
+		SELECT
+		<include refid="sysUser"></include>
+		FROM wxx_member
+		WHERE
+		id IN
+		<foreach item="id" collection="list" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+		AND
+		is_deleted = 0
+	</select>
+
+	<select id="getAllMemberId" resultType="shop.xianbao.modules.member.dto.UserMemberDTO">
+        SELECT
+            uu.id,
+            uu.open_id
+            FROM
+            wxx_union_user AS uu
+            LEFT JOIN wxx_member AS m ON uu.id = m.union_id
+            WHERE m.id IS NOT NULL
+    </select>
+
+	<select id="get" resultType="shop.xianbao.modules.member.dto.MemberUserDTO">
+		SELECT
+		ua.company_name,
+		ua.company_address,
+		ua.business_license,
+		<include refid="un_user_field"></include>
+		FROM wxx_union_user un
+		LEFT JOIN yh_user_authentication ua ON ua.union_id = un.id
+		WHERE un.id = #{id}
+	</select>
+</mapper>

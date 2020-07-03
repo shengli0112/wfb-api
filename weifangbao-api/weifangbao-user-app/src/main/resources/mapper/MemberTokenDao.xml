@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.dao.MemberTokenDao">
+
+  <sql id="fieldList">
+    id,client_type,mid,token,expire_date,last_ip
+  </sql>
+
+  <select id="getByToken" resultType="shop.xianbao.modules.member.entity.MemberTokenEntity">
+    SELECT <include refid="fieldList"/>
+    from wxx_member_token where token = #{value}
+  </select>
+
+  <select id="getByMIdClient" resultType="shop.xianbao.modules.member.entity.MemberTokenEntity">
+    SELECT <include refid="fieldList"/>
+    FROM wxx_member_token WHERE mid = #{userId} AND client_type=#{client} AND is_deleted=0 Limit 1;
+  </select>
+	<select id="getSellerTerminalIds" resultType="java.lang.String">
+        SELECT
+        IFNULL(GROUP_CONCAT(st.terminal_id),'')
+        FROM
+        yh_seller_token st
+        left join yh_seller s on s.id = st.seller_id
+        left join yh_store ys on ys.union_id = s.union_id
+        where ys.id = #{storeId}
+        and st.client_type = ${clientType}
+    </select>
+
+    <select id="getSellerId" resultType="java.lang.Long">
+        SELECT
+        IFNULL(GROUP_CONCAT(s.id),'')
+        FROM
+        yh_seller s
+        left join yh_store ys on ys.union_id = s.union_id
+        where ys.id = #{storeId}
+    </select>
+
+	<update id="updateTerminalId">
+        UPDATE wxx_member_token
+        set terminal_id = #{terminalId}, client_type = #{clientType}
+        WHERE token = #{token}
+    </update>
+</mapper>

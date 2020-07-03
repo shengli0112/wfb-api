@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.member.dao.MemberManageDao">
+
+  <select id="memManagePage" resultType="shop.xianbao.modules.member.entity.MemberManageEntity">
+    SELECT
+      u.id AS id,
+      u.id AS unionId,
+      u.mobile,
+      u.email,
+      u.realname,
+      u.nickname,
+      u.avatar,
+      u.gender,
+      u.birthday,
+      u.profession,
+      m.is_locked AS isLocked,
+      u.create_date AS createDate,
+      u.update_date AS lastLoginTime -- 临时顶替字段
+    FROM wxx_union_user u
+    LEFT JOIN wxx_member m ON u.id = m.union_id
+    where u.is_deleted=0 AND m.is_deleted=0
+    <if test="realname != null and realname.trim() != ''">
+      and u.realname = #{realname}
+    </if>
+    <if test="nickname != null and nickname.trim() != ''">
+	  and u.nickname = #{nickname}
+    </if>
+    <if test="mobile != null and mobile.trim() != ''">
+      and u.mobile = #{mobile}
+    </if>
+    <if test="email != null and email.trim() != ''">
+      and u.email = #{email}
+    </if>
+    ORDER BY u.sort,u.create_date
+    LIMIT ${limitStart},${limit}
+  </select>
+
+  <select id="memManagePageCount" resultType="integer">
+    SELECT
+    count(u.id)
+    FROM wxx_union_user u
+    LEFT JOIN wxx_member m ON u.id = m.union_id
+    where u.is_deleted=0 AND m.is_deleted=0
+    <if test="realname != null and realname.trim() != ''">
+      and u.realname = #{realname}
+    </if>
+    <if test="nickname != null and nickname.trim() != ''">
+      and u.nickname = #{nickname}
+    </if>
+    <if test="mobile != null and mobile.trim() != ''">
+      and u.mobile = #{mobile}
+    </if>
+    <if test="email != null and email.trim() != ''">
+      and u.email = #{email}
+    </if>
+  </select>
+
+</mapper>

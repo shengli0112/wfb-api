@@ -1,0 +1,93 @@
+server:
+  port: 9104
+  servlet:
+    context-path: /weifangbao_user_app
+spring:
+  datasource:
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      #      url: jdbc:mysql://rm-uf62gp033m54u1066jo.mysql.rds.aliyuncs.com:3306/xianbao_dev?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      #      username: xianbao
+      #      password: Xianbao2019
+      url: jdbc:mysql://rm-8vbdxny398021z46w.mysql.zhangbei.rds.aliyuncs.com:3306/db_weifangbao?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      username: db_weifangbao
+      password: HuCEgh2sXK
+      initial-size: 10
+      max-active: 100
+      min-idle: 10
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      #Oracle需要打开注释
+      #validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        #login-username: admin
+        #login-password: admin
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: false
+        wall:
+          config:
+            multi-statement-allow: true
+
+  redis:
+    database: 1
+    host: 127.0.0.1  # 后台服务器内网地址
+    port: 6379
+    password: 43kWz@xBgUH2VNaz # 密码（默认为空）
+    timeout: 6000ms  # 连接超时时长（毫秒）
+    jedis:
+      pool:
+        max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 10      # 连接池中的最大空闲连接
+        min-idle: 5       # 连接池中的最小空闲连接
+
+#open_api服务配置
+open_api:
+  ip: http://open.api.ruitukeji.net
+  port: 9000
+  path: x_open
+  key: 123456
+
+#app-h5页面url前缀
+app_url:
+  news_url: http://dev.xianbao.h5.ruitukeji.top/#/news_detail?id=
+
+pay:
+  wx:
+    dev: false
+    #    appId: wx08ee80e9f6d4b6bc #微信公众号或者小程序等的appid
+    #    appSecret: 00b61279b9f4b572ffb9f15ebc506933
+    #    appId: wx3c243880eeac5d2c #微信公众号或者小程序等的appid
+    #    appSecret: d337dfced734315c1534ec15e0ff6282
+    #    appId: wxe4722faff8f6e8c6 #微信公众号或者小程序等的appid  test
+    #    appSecret: 2801072485dd9ae90b440e5fc4e736d7
+    #    token: qwer
+    mchId: 1421243802 #微信支付商户号
+    #    mchKey: ujhE0ROTP5NzM27xnkQ0eIbl28FtI3Zs #微信支付商户密钥
+    mchKey: ab0qkp6A2FUqzYYXQaViNeUdKYl7969F #微信支付商户沙箱密钥
+    keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
+    notifyUrl: http://47.101.184.111:9104/weifangbao_user_app/wxpay/notify/order
+  ali:
+    #是否开启沙箱环境 true false
+    dev: true
+    #应用ID
+    appId: 2016091800539325
+    #私钥
+    privateKey: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCvKFiIKQrOMHef8vBZSChW5wrYkXus/BMvYYBwANDLXR22nayM6hHg90DglfBEo2aqGbMy8Nj+98at4KW18GI4+qcPBqsCBh+0t9T43dnhXgWPkOOQmyRQL+3DTu4z6NNz7hVjR9AumXEqxi8UCFYCpB+HWoKXTd+mmRZ8dhXr24UVbJwVVH77ngj91XiVxv12F6qnoHCuGk2Z7y4BgVr/fp8bAfZIe+gpbCOBKL0Ps36FirTyuPrp7drtY5iZfDEIQm7uQqyJqtGiwEfXctF7RPZckuKlMRlJ68It2YFdt2kUJhR7kL6shlyTFxwDSt16ZngJOw2KpKiKpse/y6YNAgMBAAECggEAQUIV4fzwkquKFiSsGYeByAbiipeBbYypFTENai1TnUD/DgemvwWCTb+xAzu5vcjnOh7DHgqPvkbQVf3pn2SFI9d3IGkKk4F2lJ0dEu+M+qNODRQdRMYYfGuu+OJSazKmfX3JqCicTpBKknYuGheU+/zr5kD5gKe52NcWgp54QlvzIlXzLbZpBEnHrBYoUPDjCgBwiksZBEdJjKqvMcLdjEhjkNRwk3HkBMoU32mdjLMnAkJhgL/yyKVAzvwFYyzWw0Ju7LmYwZZvNxgD+JkbVFClG2LG2vY5letV8jVnMXc/eGtUzEAu6TKtEa+3tmJvyHKNiQoDdJ0qwzFAWb+SfQKBgQDwhPbWg6Ece009hPGGFRVE4h+9j4J+qC+6WXmQL/LYmKLikozSjkiADhttdPpI5kg7r+MkP3QnAACgkP1IpQqYQwVN8nBA2T4ryf6csIANMrErvhQD+SF0/hemhYCoXTTNDnbPjoNQeiC++2IW9QTOiOsalTMcTtMaiQHDViRVNwKBgQC6bmp+2tA9rs5WLE2NrBkRIZk5d1HsnqFdHu10rDiDJQbfC7PVJbGHw0PxzdXkP44NO8er1+BBQBkvSWysKfmnnZA6H7R2HoqFLpSIOMrHlOpLbmzlmDk9EHdVBeg1Xy47G2O/Q3SV8zi/55HcbWCCTjFa65cqdkNcKMsndl9A2wKBgQCZ3wanb+h3dy6QB+gYNo631c4mkJQUgXafSjSqGPLMvMGgH891uM8LFXtYiDjCwIg/nyO6gdnGRYshLgDMI8HmbSIMnuhPpGvQydZY2dXiG6ca6+yUKiLMXO42ezw2+gIYmYNK/8pkhu1CIUK8mx3rH88A36imGIuXc0UseYSe+wKBgQCr0Xd00lV5g9HGua4AE8xGbaC5xa5LVSeCmy5diRvMQiPDDRYAK20iomPMRtgKNEjHCYFMbvjPKjQL0K/HPChKwnxaFT5MXnlrpTJfGXhJ2ITWYD8cmt6l2LciNP99sOr6rpOPgqvARxjWRKW5cVSwwz/Ze6cmCziphy80f3PqYQKBgDu7TT9OtVnnKLKAnn+zjtJrvmcvmlHqHX1JsLn/SBXx6XDJNBiiP5hnqOtUAYcShfqsggbXT9A0hodOgMTmB6vCasLPs1zOmen/ElgywjO2rfC5iCaWhf7B7RSd6q4A6oumMt1pWTnE6QMazusfB4xnWRHQ9O74ToqCy3kcDFDr
+    #支付宝公钥
+    aliPayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA02rlytZWbAQWz/hlMgUfmCR/xAY6kKcthHGpNA4nyUhPVl1Zd+Nzm2Hr2jhwGbbMzPiI+bRQN7QvyyXcmSFQrKwOes0X0MM440364tI37pcNfGfGrZLuCVr3g8EZsbwgXElKpLPFVUn6MJNS/4XcBfiuMijpFVL1pygZV1z9BYM022kwWvA4FONgD4BTQAJ6mHC/dv0A72x8ahOnNt6wmBfAzKpsduwm2gI2hmRqO7uFOVK86s0I7V5Wt5x+0MWkyj/yfqWTA8qbm0J7CZQEdg+5slG3ksFufRu3BsSbV/v2fmact8O4CItCkXVD4NXhc73J3ANkzwke6dx6+LE49QIDAQAB
+    #签名模式
+    signType: RSA2
+    #支付回调地址
+    notifyUrl: https://ejr9bj.natappfree.cc/xianbao_user_app/alipay/notify/order

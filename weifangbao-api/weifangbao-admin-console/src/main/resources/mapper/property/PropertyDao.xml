@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.property.dao.PropertyDao">
+
+	<resultMap type="shop.xianbao.modules.property.entity.PropertyEntity" id="propertyMap">
+		<result property="id" column="id"/>
+		<result property="areaId" column="area_id"/>
+		<result property="propertyName" column="property_name"/>
+		<result property="propertyAliasName" column="property_alias_name"/>
+		<result property="propertyIntroduce" column="property_introduce"/>
+		<result property="propertyAddress" column="property_address"/>
+		<result property="propertyCharacteristics" column="property_characteristics"/>
+		<result property="minBuildArea" column="min_build_area"/>
+		<result property="maxBuildArea" column="max_build_area"/>
+		<result property="unitPrice" column="unit_price"/>
+		<result property="totalPrice" column="total_price"/>
+		<result property="commission" column="commission"/>
+		<result property="buildingStructure" column="building_structure"/>
+		<result property="openingDate" column="opening_date"/>
+		<result property="saleStatus" column="sale_status"/>
+		<result property="saleApartment" column="sale_apartment"/>
+		<result property="saleAddress" column="sale_address"/>
+		<result property="designPictures" column="design_pictures"/>
+		<result property="apartmentPictures" column="apartment_pictures"/>
+		<result property="labels" column="labels"/>
+		<result property="propertyType" column="property_type"/>
+		<result property="decorationStandard" column="decoration_standard"/>
+		<result property="propertyRightYears" column="property_right_years"/>
+		<result property="developer" column="developer"/>
+		<result property="saleBuilding" column="sale_building"/>
+		<result property="latestOpening" column="latest_opening"/>
+		<result property="latestHand" column="latest_hand"/>
+		<result property="coverArea" column="cover_area"/>
+		<result property="buildingArea" column="building_area"/>
+		<result property="plotRatio" column="plot_ratio"/>
+		<result property="afforestationRatio" column="afforestation_ratio"/>
+		<result property="planPark" column="plan_park"/>
+		<result property="parkRatio" column="park_ratio"/>
+		<result property="planBuilding" column="plan_building"/>
+		<result property="planHouseholds" column="plan_households"/>
+		<result property="propertyCompany" column="property_company"/>
+		<result property="propertyCost" column="property_cost"/>
+		<result property="heatingMode" column="heating_mode"/>
+		<result property="waterSupply" column="water_supply"/>
+		<result property="powerSupply" column="power_supply"/>
+		<result property="preSalePermit" column="pre_sale_permit"/>
+		<result property="propertyStatus" column="property_status"/>
+		<result property="remark" column="remark"/>
+		<result property="sort" column="sort"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="creator" column="creator"/>
+		<result property="updater" column="updater"/>
+		<result property="isDeleted" column="is_deleted"/>
+	</resultMap>
+
+	<select id="getList" resultType="shop.xianbao.modules.property.dto.PropertyListDTO">
+		SELECT
+		p.id,
+		p.union_id,
+		uu.nickname,
+		uu.mobile,
+		p.area_id,
+		CONCAT(pr.region_name,"-",pr1.region_name) as area_name,
+		p.property_name,
+		p.property_alias_name,
+		p.property_introduce,
+		p.property_address,
+		p.property_characteristics,
+		p.min_build_area,
+		p.max_build_area,
+		p.unit_price,
+		p.total_price,
+		p.commission,
+		p.opening_date,
+		p.building_structure,
+		p.sale_status,
+		p.sale_apartment,
+		p.sale_address,
+		p.design_pictures,
+		p.apartment_pictures,
+		p.labels,
+		p.property_status,
+		p.is_top,
+		p.is_new,
+		p.is_discount,
+		p.is_pop,
+		p.sort,
+		p.remark,
+		p.create_date,
+		p.is_deleted
+		FROM yh_property p
+		LEFT JOIN yh_property_region pr1 ON pr1.id = p.area_id
+		LEFT JOIN yh_property_region pr ON pr.id = pr1.parent_id
+		LEFT JOIN wxx_union_user uu on uu.id = p.union_id
+		<where>
+			p.is_deleted =0
+			<if test="unionId != null and unionId !=''">
+				and p.union_id = #{unionId}
+			</if>
+			<if test="propertyName != null and propertyName !=''">
+				and p.property_name like concat(#{propertyName},'%')
+			</if>
+			<if test="area != null and area !=''">
+				and p.area_id = #{area}
+			</if>
+			<if test="mobile != null and mobile !=''">
+				and uu.mobile = #{mobile}
+			</if>
+			<if test="propertyStatus != null and propertyStatus !=''">
+				and p.property_status = #{propertyStatus}
+			</if>
+		</where>
+		ORDER BY
+		p.is_top desc,
+		p.sort asc
+	</select>
+
+	<select id="getUserList" resultType="shop.xianbao.modules.property.dto.PropertyListDTO">
+		SELECT
+		id,
+		union_id,
+		area_id,
+		property_name,
+		property_alias_name,
+		property_introduce,
+		property_address,
+		property_characteristics,
+		min_build_area,
+		max_build_area,
+		unit_price,
+		total_price,
+		commission,
+		building_structure,
+		sale_status,
+		sale_apartment,
+		sale_address,
+		design_pictures,
+		apartment_pictures,
+		labels,
+		property_status,
+		is_top,
+		sort,
+		remark,
+		create_date,
+		is_deleted
+		FROM yh_property
+		<where>
+			is_deleted =0
+			AND property_status = 4
+			<if test="areaId != null and areaId !=''">
+				AND area_id = #{areaId}
+			</if>
+			<if test="propertyName != null and propertyName !=''">
+				AND property_name LIKE CONCAT(#{propertyName},'%')
+			</if>
+			<if test="minUnitPrice != null and minUnitPrice !=''">
+				AND unit_price &gt;= #{minUnitPrice}
+			</if>
+			<if test="maxUnitPrice != null and maxUnitPrice !=''">
+				AND unit_price &lt; #{maxUnitPrice}
+			</if>
+			<if test="minTotalPrice != null and minTotalPrice !=''">
+				AND total_price &gt;= #{minTotalPrice}
+			</if>
+			<if test="maxTotalPrice != null and maxTotalPrice !=''">
+				AND total_price &lt; #{maxTotalPrice}
+			</if>
+			<if test="apartment != null and apartment !=''">
+				AND
+				<foreach collection="apartment" open="(" separator="OR" close=")" item="str">
+					sale_apartment LIKE CONCAT('%',CONCAT(#{str},'%'))
+				</foreach>
+			</if>
+			<if test="area != null and area !=''">
+				AND (${area})
+			</if>
+			<if test="type != null and type !=''">
+				AND
+				<foreach collection="type" open="(" separator="OR" close=")" item="str">
+					property_type LIKE CONCAT('%',CONCAT(#{str},'%'))
+				</foreach>
+			</if>
+			<if test="saleStatus != null and saleStatus !=''">
+				AND sale_status IN
+				<foreach collection="saleStatus" open="(" separator="," close=")" item="str">
+					#{str}
+				</foreach>
+			</if>
+			<if test="characteristic != null and characteristic !=''">
+				AND
+				<foreach collection="characteristic" open="(" separator="OR" close=")" item="str">
+					labels LIKE CONCAT('%',CONCAT(#{str},'%'))
+				</foreach>
+			</if>
+			<if test="openingDate != null and openingDate !=''">
+				AND
+				<foreach collection="openingDate" open="(" separator="OR" close=")" item="str">
+					<if test="str == 0">
+						ABS( TIMESTAMPDIFF( DAY, NOW( ), opening_date ) ) &lt;=7
+					</if>
+					<if test="str > 0">
+						((TIMESTAMPDIFF( DAY, NOW( ), opening_date )) BETWEEN 0 AND #{str})
+					</if>
+					<if test="0 > str">
+						((TIMESTAMPDIFF( DAY, NOW( ), opening_date )) BETWEEN #{str} AND 0)
+					</if>
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+	<select id="get" resultType="shop.xianbao.modules.property.dto.PropertyDTO">
+		SELECT
+		p.id,
+		p.union_id,
+		p.area_id,
+		pr1.region_name as area_name,
+		pr.id as p_area_id,
+        pr.region_name as p_area_name,
+		p.property_name,
+		p.property_alias_name,
+		p.property_introduce,
+		p.property_address,
+		p.address_lon,
+		p.address_lat,
+		p.property_characteristics,
+		p.min_build_area,
+		p.max_build_area,
+		p.unit_price,
+		p.total_price,
+		p.commission,
+		p.building_structure,
+		p.opening_date,
+		p.sale_status,
+		p.sale_apartment,
+		p.sale_address,
+		p.design_pictures,
+		p.apartment_pictures,
+		p.labels,
+		p.property_type,
+		p.decoration_standard,
+		p.property_right_years,
+		p.developer,
+		p.sale_building,
+		p.latest_opening,
+		p.latest_hand,
+		p.cover_area,
+		p.building_area,
+		p.plot_ratio,
+		p.afforestation_ratio,
+		p.plan_park,
+		p.park_ratio,
+		p.plan_building,
+		p.plan_households,
+		p.property_company,
+		p.property_cost,
+		p.heating_mode,
+		p.water_supply,
+		p.power_supply,
+		p.pre_sale_permit,
+		p.property_status,
+		p.remark,
+		p.sort,
+		p.create_date,
+		p.update_date,
+		p.creator,
+		p.updater,
+		p.is_deleted,
+		uu.mobile
+		FROM
+		yh_property AS p
+		LEFT JOIN  yh_property_region pr1 ON pr1.id = p.area_id
+        LEFT JOIN  yh_property_region pr ON pr.id = pr1.parent_id
+		LEFT JOIN wxx_union_user uu ON uu.id = p.union_id
+		WHERE p.id = #{id}
+	</select>
+</mapper>

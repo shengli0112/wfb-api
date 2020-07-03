@@ -1,0 +1,49 @@
+server:
+  port: 8075
+  servlet:
+    context-path:
+
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    #MySQL配置
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://rm-uf62gp033m54u1066jo.mysql.rds.aliyuncs.com:3306/db_weifangbao?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: dbu_weifangbao
+    password: Vkd0b1YyUkhUWGxqU
+    #oracle配置
+    #    driverClassName: oracle.jdbc.OracleDriver
+    #    url: jdbc:oracle:thin:@47.100.206.162:1521:xe
+    #    username: dbu_renren_demo_security
+    #    password: CyNCPDnCLCt3tX44
+    #SQLServer配置
+    #    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    #    url: jdbc:sqlserver://192.168.10.10:1433;DatabaseName=security_enterprise
+    #    username: sa
+    #    password: CyNCPDnCLCt3tX44
+    #PostgreSQL配置
+    #    driverClassName: org.postgresql.Driver
+    #    url: jdbc:postgresql://192.168.10.10:5432/security_enterprise
+    #    username: postgres
+    #    password: CyNCPDnCLCt3tX44
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  resources:
+    static-locations: classpath:/static/,classpath:/views/
+
+
+mybatis:
+  mapperLocations: classpath:mapper/**/*.xml
+
+
+pagehelper:
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+
+#指定数据库，可选值有【mysql、oracle、sqlserver、postgresql】
+renren:
+  database: mysql

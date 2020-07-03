@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.navigation.content.dao.NavigationContentDao">
+
+    <select id="getListType" resultType="shop.xianbao.modules.navigation.content.entity.NavigationContentEntity">
+    SELECT
+        c.id,
+        c.name,
+        c.sort,
+        c.type,
+        c.custom_url,
+        c.show_flag,
+        c.create_date,
+        m.name AS moduleName,
+        m.url AS url
+    FROM
+        wly_sys_navigation_content c
+    LEFT JOIN wly_sys_navigation_module m ON c.module_id = m.id
+    WHERE
+        c.type = #{type}
+    </select>
+
+</mapper>

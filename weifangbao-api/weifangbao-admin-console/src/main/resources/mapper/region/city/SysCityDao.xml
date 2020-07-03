@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.region.city.dao.SysCityDao">
+
+    <delete id="deleteBatchByProvinceIds">
+        DELETE FROM wly_sys_city
+        where province_id in (
+        <foreach collection="array" item="provId" separator=",">
+            #{provId}
+        </foreach>
+        )
+    </delete>
+</mapper>

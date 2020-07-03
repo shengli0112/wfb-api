@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.message.dao.MessageUserDao">
+
+	<resultMap type="shop.xianbao.modules.message.entity.MessageUserEntity" id="messageUserMap">
+		<result property="id" column="id"/>
+		<result property="messageId" column="message_id"/>
+		<result property="unionId" column="union_id"/>
+		<result property="isRead" column="is_read"/>
+		<result property="readTime" column="read_time"/>
+		<result property="sort" column="sort"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="creator" column="creator"/>
+		<result property="updater" column="updater"/>
+		<result property="isDeleted" column="is_deleted"/>
+	</resultMap>
+
+	<select id="getList" resultType="shop.xianbao.modules.message.dto.MessageUserListDTO">
+		SELECT
+		m.type,
+		m.title,
+		m.content,
+		m.image,
+		m.url,
+		m.target_id,
+		mu.id AS message_user_id,
+		mu.message_id,
+		mu.union_id,
+		mu.is_read,
+		mu.read_time,
+		m.create_date
+		FROM
+		yh_message_user AS mu
+		INNER JOIN yh_message AS m ON mu.message_id = m.id
+		<where>
+			mu.is_deleted = 0
+			and m.is_deleted = 0
+			<if test="unionId != null and unionId !=''">
+				and mu.union_id = #{unionId}
+			</if>
+		</where>
+		ORDER BY
+		m.create_date DESC
+
+	</select>
+</mapper>

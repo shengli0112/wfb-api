@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.message.dao.MessageRecordDao">
+
+    <resultMap type="shop.xianbao.modules.message.entity.MessageRecordEntity" id="messageRecordMap">
+        <result property="id" column="id"/>
+        <result property="senderId" column="sender_id"/>
+        <result property="receiverId" column="receiver_id"/>
+        <result property="content" column="content"/>
+        <result property="sendTime" column="send_time"/>
+        <result property="sort" column="sort"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="creator" column="creator"/>
+        <result property="updater" column="updater"/>
+        <result property="isDeleted" column="is_deleted"/>
+    </resultMap>
+
+    <select id="getList" resultType="shop.xianbao.modules.message.dto.MessageRecordListDTO">
+        SELECT
+        mr.id,
+        mr.sender_id,
+        mr.receiver_id,
+        mr.content,
+        mr.send_time,
+        mr.sort,
+        mr.create_date,
+        mr.update_date,
+        mr.creator,
+        mr.updater,
+        mr.is_deleted
+        FROM yh_message_record mr
+        <where>
+            #{storeId} IN ( mr.sender_id, mr.receiver_id )
+            AND #{userId} IN ( mr.sender_id, mr.receiver_id )
+            <if test="content != null and content !=''">
+                and mr.content LIKE CONCAT(CONCAT('%',#{content}),'%')
+            </if>
+        </where>
+        ORDER BY
+        mr.send_time DESC
+    </select>
+</mapper>

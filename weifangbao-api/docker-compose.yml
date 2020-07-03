@@ -1,0 +1,28 @@
+version: '2'
+services:
+  weifangbao-admin-console:
+    build:
+      context: ./weifangbao-admin-console
+      dockerfile: Dockerfile
+    image: weifangbao-admin-console
+    container_name: weifangbao-admin-console
+    mem_limit: 1024M
+    memswap_limit: -1
+    ports:
+      - "9401:9401"
+    restart: always
+    environment:
+      - spring.profiles.active=dev
+  weifangbao-user-app:
+    build:
+      context: ./weifangbao-user-app
+      dockerfile: Dockerfile
+    image: weifangbao-user-app
+    container_name: weifangbao-user-app
+    mem_limit: 1024M
+    memswap_limit: -1
+    ports:
+      - "9400:9400"
+    environment:
+      - spring.profiles.active=dev
+    restart: always

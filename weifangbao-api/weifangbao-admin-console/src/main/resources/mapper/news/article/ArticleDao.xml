@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.news.article.dao.ArticleDao">
+
+    <select id="getList" resultType="shop.xianbao.modules.news.article.entity.ArticleEntity">
+        SELECT
+            wa.id,
+            wa.title,
+            wa.click,
+            wa.comment_count,
+            wa.status,
+            wa.public_time,
+            wa.sort,
+            wac.name AS className,
+            (SELECT w.name from wly_article_class w WHERE wac.pid=w.id) as pClassName
+        FROM
+            wly_article wa
+        INNER JOIN wly_article_class wac ON wa.class_id = wac.id
+        WHERE wa.is_deleted = 0
+        <if test="title != null and title.trim() != ''">
+            and wa.title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="classId != null and classId.trim() != ''">
+            and wa.class_id = #{classId}
+        </if>
+    </select>
+
+</mapper>

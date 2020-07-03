@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.report.dao.ReportDao">
+
+	<resultMap type="shop.xianbao.modules.report.entity.ReportEntity" id="reportMap">
+		<result property="id" column="id"/>
+		<result property="unionId" column="union_id"/>
+		<result property="propertyId" column="property_id"/>
+		<result property="customerId" column="customer_id"/>
+		<result property="appointTime" column="appoint_time"/>
+		<result property="invalidTime" column="invalid_time"/>
+		<result property="status" column="status"/>
+		<result property="sort" column="sort"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="creator" column="creator"/>
+		<result property="updater" column="updater"/>
+		<result property="isDeleted" column="is_deleted"/>
+	</resultMap>
+
+	<select id="getList" resultType="shop.xianbao.modules.report.dto.ReportListDTO">
+		SELECT
+		r.id,
+		r.union_id,
+		uu.nickname,
+		uu.mobile as report_mobile,
+		r.property_id,
+		p.property_name,
+		r.customer_id,
+		r.customer_name,
+		r.customer_gender,
+		r.mobile,
+		r.is_secret,
+		r.`status`,
+		r.appoint_time,
+		r.invalid_time,
+		r.create_date
+		FROM
+		`yh_report` r
+		LEFT JOIN yh_property p ON p.id = r.property_id
+		LEFT JOIN wxx_union_user uu ON uu.id = r.union_id
+		<where>
+			r.is_deleted = 0
+			<if test="unionId != null and unionId !=''">
+				AND r.union_id = #{unionId}
+			</if>
+			<if test="propertyUnionId != null and propertyUnionId !=''">
+				AND p.union_id = #{propertyUnionId}
+			</if>
+			<if test="status != null and status !=''">
+				AND r.status = #{status}
+			</if>
+		</where>
+	</select>
+
+	<select id="getReportInfo" resultType="shop.xianbao.modules.report.dto.ReportDTO">
+		SELECT
+		r.id,
+		r.union_id,
+		uu.nickname,
+		uu.mobile as report_mobile,
+		r.property_id,
+		p.property_name,
+		p.commission,
+		r.customer_id,
+		r.customer_name,
+		r.customer_gender,
+		r.mobile,
+		r.is_secret,
+		r.`status`,
+		r.appoint_time,
+		r.subscription_time,
+		r.signing_time,
+		r.invalid_time,
+		r.create_date
+		FROM
+		`yh_report` r
+		LEFT JOIN yh_property p ON p.id = r.property_id
+		LEFT JOIN wxx_union_user uu ON uu.id = r.union_id
+		<where>
+			r.is_deleted =0
+			AND r.id =#{id}
+		</where>
+	</select>
+</mapper>

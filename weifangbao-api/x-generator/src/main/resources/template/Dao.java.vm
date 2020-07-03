@@ -1,0 +1,19 @@
+package ${package}.modules.${moduleName}.dao;
+
+import ${package}.common.dao.BaseDao;
+import ${package}.modules.${moduleName}.entity.${className}Entity;
+import ${package}.modules.${moduleName}.dto.${className}ListDTO;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+import java.util.Map;
+/**
+ * ${comments}
+ *
+ * @author ${author} ${email}
+ * @since ${version} ${date}
+ */
+@Mapper
+public interface ${className}Dao extends BaseDao<${className}Entity> {
+    List<${className}ListDTO> getList(Map<String, Object> params);
+}

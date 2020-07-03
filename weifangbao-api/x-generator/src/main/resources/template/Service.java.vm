@@ -1,0 +1,32 @@
+package ${package}.modules.${moduleName}.service;
+import ${package}.common.service.BaseService;
+import ${package}.common.page.PageData;
+import ${package}.modules.${moduleName}.dto.${className}DTO;
+import ${package}.modules.${moduleName}.dto.${className}ListDTO;
+import ${package}.modules.${moduleName}.entity.${className}Entity;
+
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * ${comments}
+ *
+ * @author ${author} ${email}
+ * @since ${version} ${date}
+ */
+public interface ${className}Service extends BaseService<${className}Entity> {
+    PageData<${className}ListDTO> page(Map<String, Object> params);
+
+    List<${className}ListDTO> list(Map<String, Object> params);
+
+    List<${className}DTO> comboList(Map<String, Object> params);
+
+    ${className}DTO get(Long id);
+
+    boolean add(${className}DTO dto);
+
+    boolean update(${className}DTO dto);
+
+    int delete(Long[] ids);
+}

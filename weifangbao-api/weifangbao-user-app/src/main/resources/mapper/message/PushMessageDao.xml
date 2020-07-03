@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.message.dao.PushMessageDao">
+
+    <resultMap type="shop.xianbao.modules.message.entity.PushMessageEntity" id="pushMessageMap">
+        <result property="id" column="id"/>
+        <result property="userType" column="user_type"/>
+        <result property="userId" column="user_id"/>
+        <result property="platform" column="platform"/>
+        <result property="receiver" column="receiver"/>
+        <result property="msgTitle" column="msg_title"/>
+        <result property="msgContent" column="msg_content"/>
+        <result property="extras" column="extras"/>
+        <result property="params" column="params"/>
+        <result property="pushTime" column="push_time"/>
+        <result property="isPushed" column="is_pushed"/>
+        <result property="sort" column="sort"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="creator" column="creator"/>
+        <result property="updater" column="updater"/>
+        <result property="isDeleted" column="is_deleted"/>
+    </resultMap>
+</mapper>

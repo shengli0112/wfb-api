@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.appversion.dao.SysAppVersionDao">
+
+    <resultMap type="shop.xianbao.modules.appversion.entity.SysAppVersionEntity" id="sysAppVersionMap">
+        <result property="id" column="id"/>
+        <result property="appType" column="app_type"/>
+        <result property="versionNumber" column="version_number"/>
+        <result property="versionInfo" column="version_info"/>
+        <result property="url" column="url"/>
+        <result property="isForceUpdate" column="is_force_update"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="creator" column="creator"/>
+        <result property="updater" column="updater"/>
+        <result property="isDeleted" column="is_deleted"/>
+    </resultMap>
+
+    <sql id="fieldList">v.id,v.app_type,v.version_sn,v.version_number,v.version_info,v.url,v.is_force_update,v.sort,v.create_date,v.update_date,v.creator,v.updater,v.is_deleted</sql>
+
+    <select id="findLast" resultType="shop.xianbao.modules.appversion.entity.SysAppVersionEntity">
+        SELECT <include refid="fieldList"></include>
+        FROM yt_sys_app_version v
+        WHERE is_deleted = 0 AND v.app_type=#{type}
+        ORDER BY v.version_sn DESC
+        LIMIT 1;
+    </select>
+
+    <select id="findByVersion" resultType="shop.xianbao.modules.appversion.entity.SysAppVersionEntity">
+        SELECT <include refid="fieldList"></include>
+        FROM yt_sys_app_version v
+        WHERE is_deleted = 0 AND v.version_number=#{version} AND v.app_type=#{type}
+        ORDER BY v.version_sn ASC
+        LIMIT 1;
+    </select>
+
+    <select id="needForcedUpdate" resultType="int">
+        SELECT COUNT(*)
+        FROM yt_sys_app_version v
+        WHERE is_deleted = 0 AND v.is_force_update=1 AND v.version_sn>#{sn} AND v.app_type=#{type}
+        ORDER BY v.version_sn DESC;
+    </select>
+</mapper>

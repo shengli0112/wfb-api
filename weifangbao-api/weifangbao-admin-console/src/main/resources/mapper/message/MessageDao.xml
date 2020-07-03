@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.message.dao.MessageDao">
+
+    <resultMap type="shop.xianbao.modules.message.entity.MessageEntity" id="messageMap">
+        <result property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="image" column="image"/>
+        <result property="url" column="url"/>
+        <result property="targetId" column="target_id"/>
+        <result property="sort" column="sort"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="creator" column="creator"/>
+        <result property="updater" column="updater"/>
+        <result property="isDeleted" column="is_deleted"/>
+    </resultMap>
+
+    <select id="getList" resultType="shop.xianbao.modules.message.dto.MessageListDTO">
+        SELECT
+        id,
+        `type`,
+        title,
+        content,
+        image,
+        url,
+        target_id,
+        sort,
+        create_date,
+        update_date,
+        creator,
+        updater,
+        is_deleted
+        FROM yh_message
+        <where>
+            `type` = 1
+            and is_deleted=0
+            <if test="title != null and title !=''">
+                and title like concat(#{title},"%")
+            </if>
+        </where>
+        ORDER BY create_date DESC
+    </select>
+</mapper>

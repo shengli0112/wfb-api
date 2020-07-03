@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.member.dao.MemberDao">
+
+  <resultMap type="shop.xianbao.modules.member.entity.MemberEntity" id="memberMap">
+    <result property="id" column="id"/>
+    <result property="sort" column="sort"/>
+    <result property="creator" column="creator"/>
+    <result property="createDate" column="create_date"/>
+    <result property="updater" column="updater"/>
+    <result property="updateDate" column="update_date"/>
+    <result property="isDeleted" column="is_deleted"/>
+    <result property="unionId" column="union_id"/>
+    <result property="isLocked" column="is_locked"/>
+    <result property="lockCase" column="lock_case"/>
+    <result property="lockedTime" column="locked_time"/>
+  </resultMap>
+
+  <resultMap type="shop.xianbao.modules.member.entity.MemberDataEntity" id="memberDataMap">
+    <result property="unionId" column="union_id"/>
+    <result property="username" column="username"/>
+    <result property="password" column="password"/>
+    <result property="salt" column="salt"/>
+    <result property="mobile" column="mobile"/>
+    <result property="email" column="email"/>
+    <result property="realname" column="realname"/>
+    <result property="nickname" column="nickname"/>
+    <result property="avatar" column="avatar"/>
+    <result property="gender" column="gender"/>
+    <result property="idCardNo" column="id_card_no"/>
+    <result property="idCardFront" column="id_card_front"/>
+    <result property="idCardBack" column="id_card_back"/>
+    <result property="idCardHand" column="id_card_hand"/>
+    <result property="isRealAuth" column="is_real_auth"/>
+    <result property="isLocked" column="is_locked"/>
+    <result property="lockCase" column="lock_case"/>
+    <result property="lockedTime" column="locked_time"/>
+    <result property="birthday" column="birthday"/>
+    <result property="profession" column="profession"/>
+    <result property="sort" column="sort"/>
+    <result property="createDate" column="create_date"/>
+    <result property="updateDate" column="update_date"/>
+    <result property="creator" column="creator"/>
+    <result property="updater" column="updater"/>
+    <result property="isDeleted" column="is_deleted"/>
+    <result property="countryId" column="country_id"/>
+    <result property="country" column="country"/>
+    <result property="provinceId" column="province_id"/>
+    <result property="province" column="province"/>
+    <result property="cityId" column="city_id"/>
+    <result property="city" column="city"/>
+    <result property="districtId" column="district_id"/>
+    <result property="district" column="district"/>
+    <result property="address" column="address"/>
+    <result property="slogan" column="slogan"/>
+    <result property="id" column="mid"/>
+    <result property="mid" column="mid"/>
+    <result property="mcreator" column="mcreator"/>
+    <result property="mcreateDate" column="mcreate_date"/>
+    <result property="mupdater" column="mupdater"/>
+    <result property="mupdateDate" column="mupdate_date"/>
+    <result property="misDeleted" column="mis_deleted"/>
+    <result property="misLocked" column="mis_locked"/>
+    <result property="mlockCase" column="mlock_case"/>
+    <result property="mlockedTime" column="mlocked_time"/>
+  </resultMap>
+
+  <update id="updateBathByIds" parameterType="java.util.List">
+    UPDATE wxx_member SET is_deleted = 1
+    WHERE
+    <foreach collection="ids" item="id" separator="," open="(" close=")">
+      #{id}
+    </foreach>
+    AND is_deleted = 0
+  </update>
+
+  <sql id="fieldList">u.id union_id,u.username,u.password,u.open_id,u.salt,u.mobile,u.email,u.realname,u.nickname,u.avatar,u.gender,u.id_card_no,u.id_card_front,u.id_card_back,u.id_card_hand,u.is_real_auth,u.is_locked,u.lock_case,u.locked_time,u.birthday,u.profession,u.create_date,u.update_date,u.creator,u.updater,u.is_deleted,u.country_id,u.country,u.province_id,u.province,u.city_id,u.city,u.district_id,u.district,u.address,u.slogan,m.id mid,m.create_date mcreate_date,m.update_date mupdate_date,m.creator mcreator,m.updater mupdater,m.is_deleted mis_deleted,m.is_locked mis_locked,m.locked_time mlocked_time</sql>
+
+
+  <select id="getMemberDataByMobile" parameterType="java.lang.String" resultMap="memberDataMap">
+    SELECT <include refid="fieldList"/>
+    FROM wxx_union_user u LEFT JOIN wxx_member m ON u.id = m.union_id
+    WHERE u.mobile = #{mobile} AND u.is_deleted=0 AND m.is_deleted=0
+    LIMIT 1;
+  </select>
+
+  <select id="getMemberDataByMid" parameterType="java.lang.Long" resultMap="memberDataMap">
+    SELECT <include refid="fieldList"/>
+    FROM wxx_union_user u LEFT JOIN wxx_member m ON u.id = m.union_id
+    WHERE m.id = #{mid} AND u.is_deleted=0 AND m.is_deleted=0
+    LIMIT 1;
+  </select>
+
+  <select id="getMemberDataByOpenId" parameterType="java.lang.String" resultMap="memberDataMap">
+    SELECT <include refid="fieldList"/>
+    FROM wxx_union_user u LEFT JOIN wxx_member m ON u.id = m.union_id
+    WHERE u.open_id = #{openId} AND u.is_deleted=0 AND m.is_deleted=0
+    LIMIT 1;
+  </select>
+  <select id="getMemberDataByUnionId" parameterType="java.lang.Long" resultMap="memberDataMap">
+    SELECT
+    <include refid="fieldList"/>
+    FROM wxx_union_user u LEFT JOIN wxx_member m ON u.id = m.union_id
+    WHERE u.id = #{unionId} AND u.is_deleted=0 AND m.is_deleted=0
+    LIMIT 1;
+  </select>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.helpcenter.content.dao.HelpContentDao">
+
+    <select id="getList" resultType="shop.xianbao.modules.helpcenter.content.entity.HelpContentEntity">
+        SELECT
+            c.id,
+            c.sort,
+            c.title,
+            t.name AS typeName
+        FROM
+            wly_help_content c
+        INNER JOIN wly_help_type t ON c.type_id = t.id
+    </select>
+</mapper>

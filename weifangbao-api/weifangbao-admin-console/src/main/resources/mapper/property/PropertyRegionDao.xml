@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.property.dao.PropertyRegionDao">
+
+	<resultMap type="shop.xianbao.modules.property.entity.PropertyRegionEntity" id="propertyRegionMap">
+		<result property="id" column="id"/>
+		<result property="parentId" column="parent_id"/>
+		<result property="regionName" column="region_name"/>
+		<result property="sort" column="sort"/>
+		<result property="createDate" column="create_date"/>
+		<result property="updateDate" column="update_date"/>
+		<result property="creator" column="creator"/>
+		<result property="updater" column="updater"/>
+		<result property="isDeleted" column="is_deleted"/>
+	</resultMap>
+
+	<select id="getList" resultType="shop.xianbao.modules.property.dto.PropertyRegionListDTO">
+		SELECT
+		pr.id,
+		pr.parent_id,
+		pr.region_name,
+		pr.is_show,
+		pr.sort,
+		pr.create_date,
+		pr.update_date,
+		pr.creator,
+		pr.updater,
+		pr.is_deleted
+		FROM yh_property_region pr
+		<where>
+			pr.is_deleted = 0
+			<if test="parentId != null and parentId !=''">
+				and pr.parent_id = #{parentId}
+			</if>
+			<if test="isShow != null and isShow !=''">
+				and pr.is_show = #{isShow}
+			</if>
+			<if test="regionName != null and regionName !=''">
+				and pr.region_name like concat(#{regionName},'%')
+			</if>
+		</where>
+	</select>
+</mapper>

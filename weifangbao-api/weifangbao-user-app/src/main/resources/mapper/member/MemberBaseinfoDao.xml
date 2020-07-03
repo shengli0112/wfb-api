@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.xianbao.modules.member.dao.MemberBaseinfoDao">
+
+    <resultMap type="shop.xianbao.modules.member.entity.MemberBaseinfoEntity" id="memberBaseinfoMap">
+        <result property="id" column="id"/>
+        <result property="uid" column="uid"/>
+        <result property="userHeadimg" column="user_headimg"/>
+        <result property="memberLevel" column="member_level"/>
+        <result property="isSystem" column="is_system"/>
+        <result property="isMember" column="is_member"/>
+        <result property="mobile" column="mobile"/>
+        <result property="userTelBind" column="user_tel_bind"/>
+        <result property="userQq" column="user_qq"/>
+        <result property="qqOpenid" column="qq_openid"/>
+        <result property="qqInfo" column="qq_info"/>
+        <result property="userEmail" column="user_email"/>
+        <result property="userEmailBind" column="user_email_bind"/>
+        <result property="wxOpenid" column="wx_openid"/>
+        <result property="wxIsSub" column="wx_is_sub"/>
+        <result property="wxInfo" column="wx_info"/>
+        <result property="otherInfo" column="other_info"/>
+        <result property="loginNum" column="login_num"/>
+        <result property="realName" column="real_name"/>
+        <result property="sex" column="sex"/>
+        <result property="location" column="location"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="wxUnionid" column="wx_unionid"/>
+        <result property="qrcodeTemplateId" column="qrcode_template_id"/>
+        <result property="wxSubTime" column="wx_sub_time"/>
+        <result property="wxNotsubTime" column="wx_notsub_time"/>
+        <result property="birthday" column="birthday"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="creator" column="creator"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updater" column="updater"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+
+    <sql id="sysUser">
+        su.uid ,su.user_headimg,su.member_level,su.is_system,su.is_member,su.user_qq ,su.qq_openid,su.qq_info,su.user_email,su.user_email_bind ,su.wx_openid ,su.wx_is_sub,su.wx_info ,su.other_info,su.login_num ,su.real_name,su.sex ,su.location,su.nick_name,su.wx_unionid,su.qrcode_template_id,su.wx_sub_time ,su.wx_notsub_time,su.birthday,su.is_deleted,su.creator ,su.create_date,su.updater,su.update_date
+    </sql>
+
+    <select id="getList" resultType="shop.xianbao.modules.member.dto.MemberDTO">
+        SELECT <include refid="sysUser"></include>,sysu.id,sysu.user_name,sysu.mobile,sysu.salt,sysu.password,sysu.status,ma.point,ma.balance,ma.coin,ml.level_name
+        FROM wdp_sys_member_baseinfo su
+        LEFT JOIN wdp_sys_member sysu ON sysu.id = su.uid
+        LEFT JOIN wdp_sys_member_account ma ON ma.uid = su.uid
+        LEFT JOIN wdp_sys_member_level ml ON ml.id = su.member_level
+        <where>
+            su.is_deleted = 0 AND sysu.is_deleted = 0 AND ma.is_deleted = 0 AND ml.is_deleted = 0
+            <if test="uid != null">
+                AND su.uid = #{uid}
+            </if>
+            <if test="userName != null and userName.trim() != ''">
+                AND su.user_name like CONCAT('%',#{userName},'%')
+            </if>
+            <if test="nickName != null and nickName.trim() != ''">
+                AND su.nick_name like CONCAT('%',#{nickName},'%')
+            </if>
+            <if test="mobile != null  and mobile.trim() != ''">
+                AND su.mobile = #{mobile}
+            </if>
+            <if test="email != null  and email.trim() != ''">
+                AND su.user_email = #{email}
+            </if>
+            <if test="memberLevel != null">
+                AND su.member_level = #{memberLevel}
+            </if>
+            <if test="startTime != null">
+                AND su.create_date &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND su.create_date &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
+</mapper>
